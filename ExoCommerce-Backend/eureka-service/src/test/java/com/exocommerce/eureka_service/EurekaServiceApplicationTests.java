@@ -1,4 +1,4 @@
-package com.exocommmerce.eureka_service;
+package com.exocommerce.eureka_service;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
