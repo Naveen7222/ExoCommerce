@@ -1,7 +1,9 @@
 package com.exocommerce.order_service.service;
 
 import com.exocommerce.order_service.entity.Order;
+import com.exocommerce.order_service.entity.ProductResponse;
 import com.exocommerce.order_service.repository.OrderRepository;
+import com.exocommerce.order_service.service.client.ProductClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,11 +14,27 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     private OrderRepository orderRepository;
+    private ProductClient productClient;
 
     @Override
     public Order createOrder(Order order) {
+
+        double total = 0.0;
+
+        for (Long productId : order.getProductIds()) {
+            var product = productClient.getProductById(productId);
+            total += product.getPrice();
+        }
+
+        order.setTotalPrice(total);
+        order.setStatus("NEW");
+
         return orderRepository.save(order);
     }
+//    @Override
+//    public Order createOrder(Order order) {
+//        return orderRepository.save(order);
+//    }
 
     @Override
     public List<Order> getAllOrders() {
